@@ -30,9 +30,9 @@ public class PlayerController : ControllerBase
         int i = 0;
 
         //Fixing PlaySkills IDs bug
-        foreach(var p in _dbContext.Players)
+        foreach (var p in _dbContext.Players)
         {
-            foreach(var pk in p.PlayerSkills)
+            foreach (var pk in p.PlayerSkills)
             {
                 i++;
                 pk.Id = i;
@@ -118,7 +118,7 @@ public class PlayerController : ControllerBase
                 return BadRequest("Error: Skill must be 'defense', 'attack', 'speed', 'strength', or 'stamina'");
             }
 
-            if(pk.Value < 1 || pk.Value > 99)
+            if (pk.Value < 1 || pk.Value > 99)
             {
                 return BadRequest("Error: Value must be between [1 and 99]");
             }
@@ -126,7 +126,18 @@ public class PlayerController : ControllerBase
 
         _dbContext.Players.Add(p);
         _dbContext.SaveChanges();
-        return Created("api/players/" + p.Id, p.Name);
+
+
+        //Fixing PlaySkills IDs bug or output
+        int i = 0;
+        foreach (var pk in p.PlayerSkills)
+        {
+            i++;
+            pk.Id = i;
+        }
+        i = 0;
+
+        return Ok(p);
     }
 
     [HttpPut("{id}")]
@@ -197,7 +208,18 @@ public class PlayerController : ControllerBase
 
         _dbContext.Update(pa);
         _dbContext.SaveChanges();
-        return Ok("Player Updated Successfully");
+
+        //Fixing PlaySkills IDs bug or output
+        int i = 0;
+        foreach (var pk in p.PlayerSkills)
+        {
+            i++;
+            pk.Id = i;
+        }
+        i = 0;
+
+        return Ok(pa);
+        //return Ok("Player Updated Successfully");
     }
 
     [HttpDelete("{id}")]
