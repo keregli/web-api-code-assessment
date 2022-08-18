@@ -47,6 +47,13 @@ public class PlayerController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAsync(int id)
     {
+        //Checking if Id exists
+        var pa = _dbContext.Players.SingleOrDefault(p => p.Id == id);
+        if (pa == null)
+        {
+            return NotFound("Player with Id:" + id + " does not exist");
+        }
+
         //Declaring both structures so PlayerSkills is not null when returning records.
         List<Player> ps = new List<Player>();
         List<PlayerSkill> ps2 = new List<PlayerSkill>();
@@ -148,7 +155,7 @@ public class PlayerController : ControllerBase
         var pa = _dbContext.Players.SingleOrDefault(p => p.Id == id);
         if (pa == null)
         {
-            return NotFound("Player with Id" + id + "does not exist");
+            return NotFound("Player with Id:" + id + " does not exist");
         }
 
         //Player Name Validation 
@@ -199,7 +206,7 @@ public class PlayerController : ControllerBase
         var pa = _dbContext.Players.SingleOrDefault(p => p.Id == id);
         if (pa == null)
         {
-            return NotFound("Player with Id" + id + "does not exist");
+            return NotFound("Player with Id:" + id + " does not exist");
         }
 
         _dbContext.Players.Remove(pa);
